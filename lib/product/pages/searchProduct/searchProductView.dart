@@ -14,7 +14,7 @@ class _searchProductViewState extends State<searchProductView> {
     return Scaffold(
       body: Container(
         child: const Center(
-          child: Text("Search Product"),
+          child: Text("Search Product View"),
         ),
       )
     );
