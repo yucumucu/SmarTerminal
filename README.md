@@ -4,7 +4,6 @@ SmarTerminal is a software engineering project that managed by a group of studen
 =======
 # smarterminal
 
-A new Flutter project.
 
 ## Getting Started
 
