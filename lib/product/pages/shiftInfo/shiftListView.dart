@@ -5,8 +5,10 @@ import 'package:smarterminal/product/pages/shiftInfo/models.dart';
 import 'package:smarterminal/product/pages/shiftInfo/shiftInfoMixin.dart';
 import 'package:smarterminal/product/pages/shiftInfo/shiftView.dart';
 
+import '../home/homeView.dart';
+
 class shiftListView extends StatefulWidget with shiftInfoMixin {
-  const shiftListView({super.key});
+   shiftListView({super.key});
 
   @override
   State<shiftListView> createState() => _shiftListViewState();
@@ -18,24 +20,28 @@ class _shiftListViewState extends State<shiftListView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Shift List'),
+        backgroundColor: colors.mainNavbarColor,
+        title: const Text('Shift List', style: TextStyle(color: Colors.white),),
       ),
       body: Center(
-        child: FutureBuilder(
-          future: shiftListView().fetchShiftList(context),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator(
-                color: Colors.green,
-              );
-            } else if (snapshot.connectionState == ConnectionState.done) {
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: FutureBuilder(
+            future: shiftListView().fetchShiftList(context),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator(
+                  color: Colors.green,
+                );
+              } else if (snapshot.connectionState == ConnectionState.done) {
 
-              return customShiftListWidget(context: context);
-            } else if (snapshot.hasError) {
-              return const Text("Failed to load shifts. Please try again.");
-            }
-            return const Text("An unknown error occurred.");
-          },
+                return customShiftListWidget(context: context);
+              } else if (snapshot.hasError) {
+                return const Text("Failed to load shifts. Please try again.");
+              }
+              return const Text("An unknown error occurred.");
+            },
+          ),
         ),
       ),
     );
@@ -46,19 +52,41 @@ Widget customListTile({required BuildContext context, required int index}) {
   final shiftListItemModel? model =
   context.watch<dataStateNotifier>().shiftListData[index];
 
-  return ListTile(
-    title: model != null ? Text(model.ad!) : Text("Shift $index"),
-    subtitle: model != null ? Text(model.soyad!) : Text("Details unavailable"),
-    onTap: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => shiftView(index: index),
-        ),
-      );
-      // Add functionality for tap here if needed.
-
-    },
+  return Padding(
+    padding: EdgeInsets.all(1.0),
+    child: Card(
+      color: model!.fark >= 0 ? Colors.green: Colors.red,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: ListTile(
+        title: model != null ? Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("Name: " + model.ad!),
+            Text("Date: " + model.tarih!),
+          ],
+        ) : Text("Shift $index"),
+        subtitle: model != null ? Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Text("Surname: " + model.soyad!),
+            Text("Time: " + model.saat!),
+          ],
+        ) : Text("Details unavailable"),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => shiftView(id: model.id, index: index ),
+            ),
+          );
+          // Add functionality for tap here if needed.
+        },
+      ),
+    ),
   );
 }
 

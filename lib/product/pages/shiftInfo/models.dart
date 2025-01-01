@@ -2,6 +2,7 @@
 
 class shiftListItemModel{
 
+  String id;
   String tarih;
   String saat;
   String ad;
@@ -11,8 +12,9 @@ class shiftListItemModel{
 
 
 
-  shiftListItemModel({required this.tarih, required this.saat, required this.ad, required this.soyad, required this.satisToplam, required this.fark});
+  shiftListItemModel({required this.id, required this.tarih, required this.saat, required this.ad, required this.soyad, required this.satisToplam, required this.fark});
 
+  String get getId => id;
   String get getTarih => tarih;
   String get getSaat => saat;
   String get getAd => ad;
@@ -24,18 +26,20 @@ class shiftListItemModel{
   //convert json to model
   factory shiftListItemModel.fromJson(Map<String, dynamic> json){
     return shiftListItemModel(
-      tarih: json['tarih'],
-      saat: json['saat'],
-      ad: json['ad'],
-      soyad: json['soyad'],
-      satisToplam: json['satisToplam'],
-      fark: json['fark']
+      id: json['id'] ?? "null",
+      tarih: json['tarih'] ?? "null",
+      saat: json['saat'] ?? "null",
+      ad: json['ad'] ?? "null",
+      soyad: json['soyad'] ?? "null",
+      satisToplam: json['satisToplam'] ?? -1,
+      fark: json['fark'] ?? -1
     );
   }
 
 
   //convert model to json
   Map<String, dynamic> toJson() => {
+    'id': id,
     'tarih': tarih,
     'saat': saat,
     'ad': ad,
@@ -46,6 +50,7 @@ class shiftListItemModel{
 
   selectedShiftDataModel mergeToSelectedShiftModel(tempModel model){
     return selectedShiftDataModel(
+      id: id,
       tarih: tarih,
       saat: saat,
       ad: ad,
@@ -90,13 +95,13 @@ class tempModel{
 
   factory tempModel.fromJson(Map<String, dynamic> json){
     return tempModel(
-      iadeToplam: double.parse(json['iadeToplam'].toString()),
-      veresiyeToplam: double.parse(json['veresiyeToplam'].toString()),
-      posToplam: double.parse(json['posToplam'].toString()),
-      nakteStop: double.parse(json['nakteStop'].toString()),
-      giderToplam: double.parse(json['giderToplam'].toString()),
-      gelirToplam: double.parse(json['gelirToplam'].toString()),
-      musteriSayisi: int.parse(json['musteriSayisi'].toString())
+      iadeToplam: json["iadeToplam"] != null ? double.parse(json['iadeToplam'].toString()) : -1,
+      veresiyeToplam: json["veresiyeToplam"] != null ? double.parse(json['veresiyeToplam'].toString()) : -1,
+      posToplam: json["posToplam"] != null ? double.parse(json['posToplam'].toString()) : -1,
+      nakteStop: json["nakteStop"] != null ? double.parse(json['nakteStop'].toString()) : -1,
+      giderToplam: json["giderToplam"] != null ? double.parse(json['giderToplam'].toString()) : -1,
+      gelirToplam: json["gelirToplam"] != null ? double.parse(json['gelirToplam'].toString()) : -1,
+      musteriSayisi: json["musteriSayisi"] != null ? int.parse(json['musteriSayisi'].toString()) : -1
 
     );
   }
@@ -105,6 +110,7 @@ class tempModel{
 // now we will create a model for selected shift data that both tempModel values and shiftListItemModel values will be used
 
 class selectedShiftDataModel{
+  String id;
   String tarih;
   String saat;
   String ad;
@@ -119,8 +125,9 @@ class selectedShiftDataModel{
   double gelirToplam;
   int musteriSayisi;
 
-  selectedShiftDataModel({required this.tarih, required this.saat, required this.ad, required this.soyad, required this.satisToplam, required this.fark, required this.iadeToplam, required this.veresiyeToplam, required this.posToplam, required this.nakteStop, required this.giderToplam, required this.gelirToplam, required this.musteriSayisi});
+  selectedShiftDataModel({required this.id, required this.tarih, required this.saat, required this.ad, required this.soyad, required this.satisToplam, required this.fark, required this.iadeToplam, required this.veresiyeToplam, required this.posToplam, required this.nakteStop, required this.giderToplam, required this.gelirToplam, required this.musteriSayisi});
 
+  String get getId => id;
   String get getTarih => tarih;
   String get getSaat => saat;
   String get getAd => ad;
@@ -138,23 +145,25 @@ class selectedShiftDataModel{
   //convert json to model
   selectedShiftDataModel fromJson(Map<String, dynamic> json){
     return selectedShiftDataModel(
-      tarih: json['tarih'],
-      saat: json['saat'],
-      ad: json['ad'],
-      soyad: json['soyad'],
-      satisToplam: json['satisToplam'],
-      fark: json['fark'],
-      iadeToplam: json['iadeToplam'],
-      veresiyeToplam: json['veresiyeToplam'],
-      posToplam: json['posToplam'],
-      nakteStop: json['nakteStop'],
-      giderToplam: json['giderToplam'],
-      gelirToplam: json['gelirToplam'],
-      musteriSayisi: json['musteriSayisi']);
+      id: json['id'] ?? "null",
+      tarih: json['tarih'] ?? "null",
+      saat: json['saat'] ?? "null",
+      ad: json['ad'] ?? "null",
+      soyad: json['soyad'] ?? "null",
+      satisToplam: json['satisToplam'] ?? -1,
+      fark: json['fark'] ?? -1,
+      iadeToplam: json['iadeToplam'] ?? -1,
+      veresiyeToplam: json['veresiyeToplam'] ?? -1,
+      posToplam: json['posToplam'] ?? -1,
+      nakteStop: json['nakteStop'] ?? -1,
+      giderToplam: json['giderToplam'] ?? -1,
+      gelirToplam: json['gelirToplam'] ?? -1,
+      musteriSayisi: json['musteriSayisi'] ?? -1);
   }
 
   //convert model to json
   Map<String, dynamic> toJson() => {
+    'id': id,
     'tarih': tarih,
     'saat': saat,
     'ad': ad,
@@ -171,4 +180,27 @@ class selectedShiftDataModel{
   };
 
 
+}
+
+
+class shiftViewSalesModel{
+  String productName;
+  int amount;
+
+
+  shiftViewSalesModel({required this.productName, required this.amount});
+
+
+
+  Map<String, dynamic> toJson() => {
+    'productName': productName,
+    'amount': amount
+  };
+
+  shiftViewSalesModel fromJson(Map<String, dynamic> json){
+    return shiftViewSalesModel(
+        productName: json['productName'] ?? "null",
+        amount: json['amount'] ?? -1
+    );
+  }
 }

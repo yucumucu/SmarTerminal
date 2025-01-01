@@ -1,11 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:smarterminal/core/init/notifier/dataStateNotifier.dart';
 import 'package:smarterminal/product/pages/shiftInfo/models.dart';
 import 'package:smarterminal/utils/dummyDataGenerator/dummyService.dart';
+import 'package:smarterminal/utils/enum/urlEnum.dart';
 
 mixin shiftInfoMixin{
+
+  String rootURL = urlEnum.getRoot.url();
+  String shiftList = urlEnum.getShiftSummaries.url();
 
 
   // add shift list to state incoming data is a list of json
@@ -13,46 +19,112 @@ mixin shiftInfoMixin{
     // get data from api
     // add data to state
 
-    final response = await http.get(Uri.parse('https://jsonplaceholder.typicode.com/posts'));
-    if (response.statusCode == 200) {
-      // If the server returns a 200 OK response, then parse the JSON.
-      // final List<dynamic> data = jsonDecode(response.body);
-      // final List<Shift> shifts = data.map((e) => Shift.fromJson(e)).toList();
-      List<Map<String,dynamic>> shiftListJson= dummyDataService().dummyShiftList();
-      List<shiftListItemModel> shiftListData = shiftListJson.map((e) => shiftListItemModel.fromJson(e)).toList();
+    http.Response response_real = http.Response("", 404);
 
-      context.read<dataStateNotifier>().updateShiftListData(shiftListData);
-
-    } else {
-      // If the server returns an error response, then throw an exception.
-      throw Exception('Failed to load shift');
+    /*
+    try {
+      response_real = await http.get(
+          Uri.parse(rootURL + shiftList));
+    }catch(e){
+      print(e);
     }
+
+     */
+    List<Map<String, dynamic>> shiftListJson;
+    List<shiftListItemModel> shiftListData;
+
+    if (response_real.statusCode != 200){
+
+      shiftListJson= dummyDataService().dummyShiftList();
+
+      shiftListData = shiftListJson.map((e) => shiftListItemModel.fromJson(e)).toList();
+
+    }else{
+
+      shiftListJson = jsonDecode(response_real.body);
+      shiftListData = shiftListJson.map((e) => shiftListItemModel.fromJson(e)).toList();
+
+    }
+
+    context.read<dataStateNotifier>().updateShiftListData(shiftListData);
 
 
   }
 
-  Future<void> fetchSelectedShiftData(BuildContext context, int index) async{
+  Future<void> fetchSelectedShiftData(BuildContext context, String id, int index) async{
 
-    String id = index.toString();
 
-    //request: GET http://localhost:8080/api/shifts/9/details
+    http.Response response_real = http.Response("", 404);
 
-    //final response = await http.get(Uri.parse('http://localhost:8080/api/shifts/$id/details'));
-    final response = await http.get(Uri.parse('https://jsonplaceholder.typicode.com/posts/$id'));
-    if (response.statusCode == 200){
-      // final Map<String,dynamic> data = jsonDecode(response.body);
-      // final Shift shift = Shift.fromJson(data);
-      Map<String,dynamic> shiftDataJson = dummyDataService().dummySelectedShift();
-      tempModel tmp = tempModel.fromJson(shiftDataJson);
+    String shiftDetailURL = urlEnum.getShiftDetails.url(id);
 
-      shiftListItemModel itemModel = context.read<dataStateNotifier>().shiftListData[index];
-      selectedShiftDataModel selectedShiftData = itemModel.mergeToSelectedShiftModel(tmp);
-
-      context.read<dataStateNotifier>().updateSelectedShiftData(selectedShiftData);
-
-    }else{
-      throw Exception('Failed to load selected shift');
+    /*
+    try {
+      response_real = await http.get(Uri.parse(rootURL + shiftDetailURL));
+    }catch(e){
+      print(e);
     }
+
+     */
+
+    Map<String,dynamic> data;
+
+    if(response_real.statusCode != 200){
+      data = dummyDataService().dummySelectedShift();
+    }else{
+      data = jsonDecode(response_real.body);
+    }
+    tempModel tmp = tempModel.fromJson(data);
+
+    shiftListItemModel itemModel = context.read<dataStateNotifier>().shiftListData[index];
+    selectedShiftDataModel selectedShiftData = itemModel.mergeToSelectedShiftModel(tmp);
+
+    context.read<dataStateNotifier>().updateSelectedShiftData(selectedShiftData);
+
+
+  }
+
+
+
+  Future<void> fetchSelectedShiftSalesData(BuildContext context, String id) async {
+
+
+    String shiftSalesURL = urlEnum.getShiftSales.url(id);
+
+    http.Response response_real = http.Response("", 404);
+
+    /*
+    try {
+      response_real = await http.get(Uri.parse(rootURL + shiftSalesURL));
+    }catch(e){
+      print(e);
+    }
+
+     */
+
+    Map<String,dynamic> data;
+
+    if(response_real.statusCode != 200){
+      data = dummyDataService().dummySelectedShiftSales();
+    }else{
+      data = jsonDecode(response_real.body);
+    }
+
+    List<shiftViewSalesModel> salesData = [];
+
+    data.forEach((key, value) {
+      shiftViewSalesModel salesModel = shiftViewSalesModel(
+        productName: key,
+        amount: value
+      );
+
+      salesData.add(salesModel);
+    });
+
+    context.read<dataStateNotifier>().updateSelectedShiftSalesData(salesData);
+
+
+
   }
 
 

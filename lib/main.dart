@@ -12,7 +12,10 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
       MultiProvider(
-        providers: [...ApplicationProvider.instance.dependItems],
+        providers: [
+          ...ApplicationProvider.instance.dependItems,
+
+        ],
           child:  MyApp()));
 }
 

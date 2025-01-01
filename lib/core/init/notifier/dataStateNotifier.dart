@@ -23,6 +23,8 @@ class dataStateNotifier extends ChangeNotifier{
   List<homeViewDataModel> _mainMenuStatsData = [];
   List<homeViewDataModel> get mainMenuStatsData => _mainMenuStatsData;
 
+  List<shiftViewSalesModel> _selectedShiftSalesData = [];
+  List<shiftViewSalesModel> get selectedShiftSalesData => _selectedShiftSalesData;
 
 
   void changeMainMenuStatsLoadingState(bool state){
@@ -34,6 +36,7 @@ class dataStateNotifier extends ChangeNotifier{
     _mainMenuStatsData = mainMenuStatsData;
     notifyListeners();
   }
+
 
 
   void changeShiftListDataLoadingState(bool state){
@@ -54,6 +57,17 @@ class dataStateNotifier extends ChangeNotifier{
   void updateSelectedShiftData(selectedShiftDataModel selectedShiftData){
     _selectedShiftData = selectedShiftData;
     notifyListeners();
+  }
+
+  void updateSelectedShiftSalesData(List<shiftViewSalesModel> shiftViewSalesData){
+    
+    //sort max to min amount
+    shiftViewSalesData.sort((a, b) => b.amount.compareTo(a.amount));
+
+
+    _selectedShiftSalesData = shiftViewSalesData;
+    notifyListeners();
+
   }
 
 }

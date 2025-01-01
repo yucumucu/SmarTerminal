@@ -12,9 +12,11 @@ class _searchProductViewState extends State<searchProductView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Text('Search Product'),
-      ),
+      body: Container(
+        child: const Center(
+          child: Text("Search Product"),
+        ),
+      )
     );
   }
 }

@@ -3,6 +3,7 @@
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:smarterminal/core/init/notifier/dataStateNotifier.dart';
+import 'package:smarterminal/core/init/notifier/uiNotifier.dart';
 
 class ApplicationProvider {
   ApplicationProvider._init();
@@ -16,6 +17,7 @@ class ApplicationProvider {
   List<SingleChildWidget> dependItems = [
     ChangeNotifierProvider(
         create: (context) =>dataStateNotifier()),
+    ChangeNotifierProvider(create: (context) => uiNotifier()),
 
   ];
   List<SingleChildWidget> uiChangesItems = [];

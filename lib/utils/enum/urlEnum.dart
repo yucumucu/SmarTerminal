@@ -26,14 +26,18 @@ Genel Tanım:
 
 enum urlEnum {
   //GET
+  getRoot,
   getAllShifts,
   getShiftById,
   getShiftSummaries,
   getShiftDetails,
+  getShiftSales,
   mainMenuStats;
 
-  String url() {
+  String url([String? id]) {
     switch (this) {
+      case urlEnum.getRoot:
+        return "http://10.1.249.234:8080";
       case urlEnum.getAllShifts:
         return "/api/shifts";
       case urlEnum.getShiftById:
@@ -41,9 +45,12 @@ enum urlEnum {
       case urlEnum.getShiftSummaries:
         return "/api/shifts/summaries";
       case urlEnum.getShiftDetails:
-        return "/api/shifts/{id}/details";
+        return "/api/shifts/${id}/details";
+      case urlEnum.getShiftSales:
+        return "/api/shifts/${id}/sales";
       case urlEnum.mainMenuStats:
         return "/api/MainMenuStats";
+
 
       default:
         return "";

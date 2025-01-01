@@ -15,29 +15,27 @@ class homeView extends StatefulWidget with homeViewMixin{
 
 class _homeViewState extends State<homeView> {
 
-  @override
-  void initState() {
-    super.initState();
-  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home'),
       ),
 
 
       floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
       floatingActionButton: FloatingActionButton(
+        backgroundColor: colors.floatingActionButtonColor,
+
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(100),
+
         ),
         onPressed: () {
           // Add your onPressed code here!
         },
-        child: const Icon(Icons.add),
-        backgroundColor: Colors.green,
+        child: const Icon(Icons.document_scanner_outlined),
       ),
 
       bottomNavigationBar: mainBottomNavBar(),
@@ -45,9 +43,23 @@ class _homeViewState extends State<homeView> {
       body: Column(
         //design a main card at the top big and two small cards at the bottom use cardButton widget
 
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+
+
+          Padding(
+            padding: const EdgeInsets.only(top: 15.0, bottom: 5.0),
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width * 0.9,
+              child: const Text("Kardeşler Market", style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),),
+            ),
+          ),
+
           mainViewStatsCard(),
           Padding(padding: EdgeInsets.only(top: sizes().cardButtonPadding(context))),
           Row(
@@ -55,9 +67,9 @@ class _homeViewState extends State<homeView> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               cardButton(
-                title: "Scan Barcode",
-                routeName: "/scanBarcodeView",
-                icon: Icons.chrome_reader_mode_outlined,
+                title: "View Shits",
+                routeName: "/shiftListView",
+                icon: Icons.pending_actions,
                 width: sizes().secondaryCardButtonWidth(context),
                 height: sizes().secondaryCardButtonHeight(context),
               ),
@@ -65,20 +77,13 @@ class _homeViewState extends State<homeView> {
               cardButton(
                 title: "Search Product",
                 routeName: "/searchProductView",
-                icon: Icons.tab,
+                icon: Icons.search,
                 width: sizes().secondaryCardButtonWidth(context),
                 height: sizes().secondaryCardButtonHeight(context),
-              ),
+              ), 
             ],
           ),
-          Padding(padding: EdgeInsets.only(top: sizes().cardButtonPadding(context))),
-          cardButton(
-            title: "See Shifts",
-            routeName: "/shiftListView",
-            icon: Icons.settings,
-            width: sizes().thirdCardButtonWidth(context),
-            height: sizes().thirdCardButtonHeight(context),
-          ),
+
 
         ],
       )
@@ -94,14 +99,14 @@ class mainBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-      backgroundColor: Colors.black12,
-      selectedItemColor: Colors.green,
+      backgroundColor: Colors.white,
+      selectedItemColor: colors.mainNavbarColor,
       unselectedItemColor: Colors.grey,
 
       showSelectedLabels: true,
       selectedLabelStyle: TextStyle(
         fontWeight: FontWeight.normal,
-        color: Colors.green,
+        color: colors.mainNavbarColor,
       ),
       showUnselectedLabels: true,
       unselectedLabelStyle: TextStyle(
@@ -115,30 +120,33 @@ class mainBottomNavBar extends StatelessWidget {
         BottomNavigationBarItem(
           icon: Icon(
               Icons.home,
-            color: Colors.green,
+            color: colors.mainNavbarColor,
           ),
           label: 'Home',
         ),
+        /*
         BottomNavigationBarItem(
           icon: Icon(
               Icons.table_chart,
-            color: Colors.green,
+            color:  colors.mainNavbarColor,
           ),
           label: 'Shifts',
         ),
         BottomNavigationBarItem(
           icon: Icon(
               Icons.production_quantity_limits_sharp,
-            color: Colors.green,
+            color:  colors.mainNavbarColor,
           ),
           label: 'Products',
         ),
+
+         */
         BottomNavigationBarItem(
           icon: Icon(
               Icons.account_box,
-            color: Colors.green,
+            color: colors.mainNavbarColor,
           ),
-          label: 'Accounts',
+          label: 'Account',
         ),
       ],
     );
@@ -152,15 +160,15 @@ class sizes{
   }
 
   mainCardButtonHeight(BuildContext context) {
-    return MediaQuery.of(context).size.height * 0.4;
+    return MediaQuery.of(context).size.height * 0.5;
   }
 
   secondaryCardButtonWidth(BuildContext context) {
-    return MediaQuery.of(context).size.width * 0.4;
+    return MediaQuery.of(context).size.width * 0.44;
   }
 
   secondaryCardButtonHeight(BuildContext context) {
-    return MediaQuery.of(context).size.height * 0.2;
+    return MediaQuery.of(context).size.height * 0.15;
   }
 
   thirdCardButtonWidth(BuildContext context) {
@@ -168,11 +176,11 @@ class sizes{
   }
 
   thirdCardButtonHeight(BuildContext context) {
-    return MediaQuery.of(context).size.height * 0.05;
+    return MediaQuery.of(context).size.height * 0.1;
   }
 
   cardButtonPadding(BuildContext context) {
-    return MediaQuery.of(context).size.width * 0.05;
+    return MediaQuery.of(context).size.width * 0.02;
   }
 
   cardButtonIconSize(BuildContext context) {
@@ -185,9 +193,13 @@ class sizes{
 
 class colors{
   static const Color mainAppBarTextColor = Colors.white;
-  static const Color circularProgressBarColor = Colors.blue;
+  static const Color circularProgressBarColor = Colors.purple;
   static const Color cardButtonIconColor = Colors.blue;
-  Color cardButtonBackgroundColor = Colors.green;
+  Color cardButtonBackgroundColor = Colors.deepPurple;
+  static const Color mainBackgroundColor = Colors.white;
+  static const Color mainTextColor = Colors.black;
+  static const Color mainNavbarColor = Colors.deepPurple;
+  static const Color floatingActionButtonColor = Colors.blueGrey;
 }
 
 class mainViewStatsCard extends StatelessWidget {
@@ -196,32 +208,36 @@ class mainViewStatsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      shape: RoundedRectangleBorder(
+        side : BorderSide(color: colors.mainNavbarColor),
+        borderRadius: BorderRadius.all(
+            Radius.circular(10.0))
+      ),
 
       child: SizedBox(
         width: sizes().mainCardButtonWidth(context),
         height: sizes().mainCardButtonHeight(context),
 
+
         child: FutureBuilder(
             future: homeView().fetchHomeViewStatsData(context),
             builder: (context, snapshot){
+
 
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const SizedBox(
                     width: 10,
                     height: 10,
-                    child:  CircularProgressIndicator());
+                    child:  CircularProgressIndicator(
+                      strokeWidth: 4.0,
+                    ));
 
               } else if (snapshot.connectionState == ConnectionState.done) {
-                print("Home view stats data loaded successfully.");
+
 
                 List<homeViewDataModel> data = context.watch<dataStateNotifier>().mainMenuStatsData;
 
-                return Row(
-                  children: [
-
-                    pieChartWidget(context, sizes().mainCardButtonWidth(context) , sizes().mainCardButtonHeight(context) ),
-                  ],
-                );
+                return Center(child: pieChartWidget(context, sizes().mainCardButtonWidth(context) *4/5  , sizes().mainCardButtonHeight(context) ));
 
               } else{
                 return const Text("Failed to load home view stats. Please try again.");
@@ -266,6 +282,7 @@ class cardButton extends StatelessWidget {
           color: colors().cardButtonBackgroundColor,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(padding: EdgeInsets.only(left: sizes().cardButtonPadding(context))),
               Icon(
@@ -295,6 +312,8 @@ class cardButton extends StatelessWidget {
 Widget pieChartWidget(BuildContext context, double width, double height){
 
   List<homeViewDataModel> data = context.watch<dataStateNotifier>().mainMenuStatsData;
+
+
   Map<String, double> dataMap = {};
   for (int i = 0; i < data.length; i++){
     dataMap[data[i].categoryName] = data[i].categoryPercentage;
@@ -304,7 +323,25 @@ Widget pieChartWidget(BuildContext context, double width, double height){
     width: width,
     height: height,
 
-    child: PieChart(dataMap: dataMap )
+    child: PieChart(
+
+
+      dataMap: dataMap,
+      colorList: [
+        Colors.red,
+        Colors.green,
+        Colors.deepPurple,
+        Colors.cyan,
+      ],
+
+      legendOptions: LegendOptions(
+        legendTextStyle: TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.bold),
+          legendPosition: LegendPosition.bottom
+      ),
+
+    )
   );
 }
 
