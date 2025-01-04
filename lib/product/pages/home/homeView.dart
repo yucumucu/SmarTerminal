@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +17,12 @@ class homeView extends StatefulWidget with homeViewMixin{
 
 class _homeViewState extends State<homeView> {
 
+
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
 
   @override
@@ -52,11 +60,7 @@ class _homeViewState extends State<homeView> {
             padding: const EdgeInsets.only(top: 15.0, bottom: 5.0),
             child: SizedBox(
               width: MediaQuery.of(context).size.width * 0.9,
-              child: const Text("Kardeşler Market", style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),),
+              child: const AnimatedLetterText(),
             ),
           ),
 
@@ -87,6 +91,73 @@ class _homeViewState extends State<homeView> {
 
         ],
       )
+    );
+  }
+}
+
+// This widget will only handle the animated text
+class AnimatedLetterText extends StatefulWidget {
+  const AnimatedLetterText({Key? key}) : super(key: key);
+
+  @override
+  State<AnimatedLetterText> createState() => _AnimatedLetterTextState();
+}
+
+class _AnimatedLetterTextState extends State<AnimatedLetterText> {
+  final String fullText = "Kardeşler Market";
+  String displayText = "";
+  bool isDeleting = false;
+  int charIndex = 0;
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    displayText = fullText;
+    _startAnimation();
+  }
+
+  void _startAnimation() {
+    _timer = Timer.periodic(const Duration(milliseconds: 75), (timer) {
+      if (mounted) {
+        if (isDeleting) {
+          if (charIndex < fullText.length) {
+            displayText = fullText.substring(0, fullText.length - charIndex - 1);
+            charIndex++;
+          } else {
+            isDeleting = false;
+            charIndex = 0;
+          }
+        } else {
+          if (charIndex < fullText.length) {
+            displayText = fullText.substring(0, charIndex + 1);
+            charIndex++;
+          } else {
+            isDeleting = true;
+            charIndex = 0;
+          }
+        }
+        // Only rebuild this specific widget
+        setState(() {});
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      displayText,
+      style: const TextStyle(
+        fontSize: 35,
+        fontWeight: FontWeight.bold,
+        color: Colors.black,
+      ),
     );
   }
 }
