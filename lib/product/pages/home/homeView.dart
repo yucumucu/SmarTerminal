@@ -41,6 +41,7 @@ class _homeViewState extends State<homeView> {
 
         ),
         onPressed: () {
+          Navigator.pushNamed(context, "/scanBarcodeView");
           // Add your onPressed code here!
         },
         child: const Icon(Icons.document_scanner_outlined),

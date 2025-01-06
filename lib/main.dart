@@ -28,10 +28,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
 
       routes:  {
-        "/homeView": (context) => homeView(),
-        "/productInfoView": (context) => productInfo(),
+        "/homeView": (context) => const homeView(),
         "/scanBarcodeView": (context) => scanBarcodeView(),
-        "/searchProductView": (context) => searchProductView(),
+        "/searchProductView": (context) => const searchProductView(),
         "/shiftListView": (context) => shiftListView(),
       },
 

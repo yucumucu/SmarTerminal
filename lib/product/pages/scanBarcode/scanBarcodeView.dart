@@ -1,103 +1,131 @@
-import 'dart:async';
-import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
-import 'package:camera/camera.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:smarterminal/product/pages/productInfo/productInfo.dart';
+import 'package:smarterminal/product/pages/scanBarcode/scanBarcodeViewMixin.dart';
 
+import '../productInfo/productModel.dart';
 
-
-abstract class CameraViewInit {
-  CameraController get controller;
-  Timer? get timer;
-  bool get isCapturing;
-  bool isNavigating = false;
-
-  set timer(Timer? timer);
-  set isCapturing(bool isCapturing);
-
-}
-
-
-class scanBarcodeView extends StatefulWidget {
-  const scanBarcodeView({super.key});
-
+class scanBarcodeView extends StatefulWidget with scanBarcodeViewMixin {
   @override
-  State<scanBarcodeView> createState() => _scanBarcodeViewState();
+  _scanBarcodeViewState createState() => _scanBarcodeViewState();
 }
 
 class _scanBarcodeViewState extends State<scanBarcodeView> {
+  String _scannedBarcode = 'No barcode scanned';
+
+  /// Start scanning for a barcode
+  Future<void> startBarcodeScan() async {
+    String scannedBarcode;
+    try {
+      scannedBarcode = await FlutterBarcodeScanner.scanBarcode(
+        '#ff6666', // Color of the cancel button
+        'Cancel',  // Cancel button text
+        true,      // Show flash option
+        ScanMode.BARCODE, // Scan mode (BARCODE or QR_CODE)
+      );
+    } catch (e) {
+      scannedBarcode = 'Failed to scan barcode.';
+    }
+
+    if (!mounted) return;
+
+    setState(() {
+      if (scannedBarcode != '-1') {
+
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const scanBarcodeLoading()));
 
 
-  CameraController? _controller;
-
-  @override
-  Timer? timer;
-  @override
-  bool isCapturing = false;
-  @override
-  bool isNavigating = false;
-  @override
-  late Uint8List ss_image;
-
-
-  @override
-  void initState() {
-    initializeCamera(context);
-    super.initState();
-  }
-
-
-  Future<void> initializeCamera(BuildContext context) async {
-    final cameras = await availableCameras();
-    final firstCamera = cameras[0];
-
-    _controller = CameraController(
-      firstCamera,
-      ResolutionPreset.high,
-      enableAudio: false,
-    );
-
-    _controller?.setFlashMode(FlashMode.off);
-
-    await _controller!.initialize();
-    setState(() {});
-
-    timer = Timer.periodic(const Duration(milliseconds: 500), (timer) async {
-      if (isCapturing) return;
-      isCapturing = true;
-
-      try {
-        final image = await _controller!.takePicture();
-
-        //final List<Uint8List> cropped_compressed_list = await cropAndCompressImage(context, image.path);
-
-        //make sure image is deleted after use
-        File(image.path).delete();
-
-      } catch (e) {
-        debugPrint('Error capturing image: $e');
-      } finally {
-        isCapturing = false;
+      } else {
+        _scannedBarcode = 'Scan cancelled.';
       }
     });
   }
 
   @override
-  void dispose() {
-    timer?.cancel();
-    _controller?.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    if (!(_controller?.value.isInitialized ?? false)) {
-      return const SizedBox();
-    }
-
     return Scaffold(
-      body: CameraPreview(_controller!),
+      appBar: AppBar(
+        title: const Text('Barcode Scanner'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              'Scanned Barcode:',
+              style: TextStyle(fontSize: 18),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 10),
+            Text(
+              _scannedBarcode,
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: startBarcodeScan,
+              style: ElevatedButton.styleFrom(
+                padding: EdgeInsets.symmetric(vertical: 12),
+                textStyle: TextStyle(fontSize: 18),
+              ),
+              child: const Text('Start Scanning'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
+
+class scanBarcodeLoading extends StatelessWidget with scanBarcodeViewMixin {
+  const scanBarcodeLoading({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: FutureBuilder(
+          future: scanBarcodeView().getScannedProduct(context),
+          builder: (context, snapshot){
+
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(color: Colors.green),
+              );
+            } else if (snapshot.connectionState == ConnectionState.done) {
+
+              productModel model = snapshot.data as productModel;
+
+              Navigator.push(context, MaterialPageRoute(builder: (context) => productInfo(model: model)));
+
+
+            } else if (snapshot.hasError) {
+              return const Center(
+                child: Text(
+                  "Failed to load scanned data. Please try again.",
+                  style: TextStyle(color: Colors.red),
+                ),
+              );
+            }
+
+            return const Center(
+              child: Text(
+                "Failed to load scanned data. Please try again.",
+                style: TextStyle(color: Colors.red),
+              ),
+            );
+
+
+
+
+      })
+    );
+  }
+}
+
