@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smarterminal/product/pages/home/homeView.dart';
 import 'package:smarterminal/product/pages/productInfo/productInfo.dart';
+import 'package:smarterminal/product/pages/productInfo/productModel.dart';
 import 'package:smarterminal/product/pages/scanBarcode/scanBarcodeView.dart';
 import 'package:smarterminal/product/pages/searchProduct/searchProductView.dart';
 import 'package:smarterminal/product/pages/shiftInfo/shiftListView.dart';
@@ -25,6 +26,18 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
+
+    productModel model = productModel(
+      name: "product name",
+      purchasePrice: 10.0,
+      salePrice: 20.0,
+      amount: 320,
+      group: "group",
+      monthlySale: 245
+    );
+
+
     return MaterialApp(
 
       routes:  {
@@ -55,7 +68,12 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
+
+
+      //home: productInfo(model: model),
       home: homeView(),
     );
   }
 }
+
+
