@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
       routes:  {
         "/homeView": (context) => const homeView(),
         "/scanBarcodeView": (context) => scanBarcodeView(),
-        "/searchProductView": (context) => const searchProductView(),
+        "/searchProductView": (context) =>  searchProductView(),
         "/shiftListView": (context) => shiftListView(),
       },
 
