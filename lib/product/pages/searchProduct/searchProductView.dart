@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:smarterminal/product/pages/productInfo/productInfo.dart';
 import 'dart:convert';
 
 import 'package:smarterminal/product/pages/productInfo/productModel.dart';
+import 'package:smarterminal/utils/dummyDataGenerator/dummyService.dart';
 
 class searchProductView extends StatefulWidget {
   @override
@@ -23,26 +25,8 @@ class _searchProductViewState extends State<searchProductView> {
 
     try {
 
-      productModel _product1 = productModel(
-          name: "product1",
-          purchasePrice: 1,
-          salePrice: 1,
-          group: "group1",
-          amount: 1,
-          monthlySale: 1);
-
-      productModel _product2 = productModel(
-          name: "product2",
-          purchasePrice: 2,
-          salePrice: 2,
-          group: "group2",
-          amount: 2,
-          monthlySale: 2);
-
-
-
       setState(() {
-         _products = [_product1, _product2];
+        _products = dummyDataService().fetchSearchProductData();
       });
 
     } catch (e) {
@@ -111,7 +95,7 @@ class _searchProductViewState extends State<searchProductView> {
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  ProductDetailPage(product: product),
+                                  productInfo(model: product),
                             ),
                           );
                         },
@@ -120,27 +104,6 @@ class _searchProductViewState extends State<searchProductView> {
                   ),
                 ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class ProductDetailPage extends StatelessWidget {
-  final productModel product;
-
-  const ProductDetailPage({Key? key, required this.product}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(product.name),
-      ),
-      body: Center(
-        child: Text(
-          'Welcome to the ${product.name} page!',
-          style: const TextStyle(fontSize: 20),
         ),
       ),
     );

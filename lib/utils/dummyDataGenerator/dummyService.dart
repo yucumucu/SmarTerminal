@@ -1,5 +1,7 @@
 
 
+import 'package:smarterminal/product/pages/productInfo/productModel.dart';
+
 class dummyDataService{
 
 
@@ -134,6 +136,30 @@ class dummyDataService{
       "Beverage": 40,
       "Cigarette": 78
     };
+
+  }
+
+
+  List<productModel> fetchSearchProductData(){
+    productModel _product1 = productModel(
+        name: "product1",
+        purchasePrice: 1,
+        salePrice: 1,
+        group: "group1",
+        amount: 1,
+        monthlySale: 1);
+
+    productModel _product2 = productModel(
+        name: "product2",
+        purchasePrice: 2,
+        salePrice: 2,
+        group: "group2",
+        amount: 2,
+        monthlySale: 2);
+
+
+    return [_product1, _product2];
+
 
   }
 
