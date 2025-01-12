@@ -188,13 +188,18 @@ class mainBottomNavBar extends StatelessWidget {
 
 
 
-      items: const <BottomNavigationBarItem>[
+      items:  <BottomNavigationBarItem>[
         BottomNavigationBarItem(
-          icon: Icon(
-              Icons.home,
+
+          icon: IconButton(
+              icon: Icon(Icons.home),
+            onPressed: () {
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const homeView()));
+            },
             color: colors.mainNavbarColor,
           ),
           label: 'Home',
+
         ),
         /*
         BottomNavigationBarItem(

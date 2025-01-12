@@ -43,15 +43,15 @@ class productViewTopWidget extends StatelessWidget {
       height: MediaQuery.of(context).size.height * 0.1,
       width: MediaQuery.of(context).size.width * 0.9,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
               width: MediaQuery.of(context).size.width * 0.3,
-              child: const Icon(
-                Icons.scatter_plot_rounded,
-                size: 80,
+              child:  Icon(
+                Icons.,
+                fill: 1.0,
+                size: MediaQuery.of(context).size.height * 0.1,
               )),
           SizedBox(width: MediaQuery.of(context).size.width * 0.01),
           SizedBox(width: MediaQuery.of(context).size.width * 0.3,

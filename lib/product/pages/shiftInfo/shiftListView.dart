@@ -54,39 +54,81 @@ Widget customListTile({required BuildContext context, required int index}) {
 
   return Padding(
     padding: EdgeInsets.all(1.0),
-    child: Card(
-      color: model!.fark >= 0 ? Colors.green: Colors.red,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      child: ListTile(
-        title: model != null ? Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("Name: " + model.ad!),
-            Text("Date: " + model.tarih!),
-          ],
-        ) : Text("Shift $index"),
-        subtitle: model != null ? Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Text("Surname: " + model.soyad!),
-            Text("Time: " + model.saat!),
-          ],
-        ) : Text("Details unavailable"),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => shiftView(id: model.id, index: index ),
-            ),
-          );
-          // Add functionality for tap here if needed.
-        },
+    child: SizedBox(
+      height: MediaQuery.of(context).size.height * 0.12,
+
+      child: Card(
+        color: model!.fark >= 0 ? Colors.green: Colors.red,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: Center(child: customListTileBox(context, model))
       ),
     ),
+  );
+}
+
+Widget customListTileBox(BuildContext context, shiftListItemModel model) {
+  return SizedBox(
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                 Padding(
+                   padding: EdgeInsets.all(8.0),
+                   child: Icon(
+                    Icons.person,
+                    size: MediaQuery.of(context).size.height * 0.06,
+                                   ),
+                 ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(model.ad!),
+                    Text(model.soyad!),
+                  ],
+                )
+              ]
+            )
+          ],
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Row(
+              children: [
+                Icon(
+                    Icons.calendar_today,
+                    size: MediaQuery.of(context).size.height * 0.03,
+                ),
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(model.tarih!),
+                      Text(model.saat!),
+                    ],
+                  ),
+                )
+              ]
+            )
+          ],
+        ),
+          
+        
+        
+      ]
+    ),
+    
   );
 }
 
