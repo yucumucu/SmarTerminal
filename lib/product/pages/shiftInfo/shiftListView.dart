@@ -57,12 +57,25 @@ Widget customListTile({required BuildContext context, required int index}) {
     child: SizedBox(
       height: MediaQuery.of(context).size.height * 0.12,
 
-      child: Card(
-        color: model!.fark >= 0 ? Colors.green: Colors.red,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => shiftView(
+                id: model!.id!,
+                index: index,
+              ),
+            ),
+          );
+        },
+        child: Card(
+          color: model!.fark >= 0 ? Colors.green: Colors.red,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: Center(child: customListTileBox(context, model))
         ),
-        child: Center(child: customListTileBox(context, model))
       ),
     ),
   );
@@ -90,8 +103,8 @@ Widget customListTileBox(BuildContext context, shiftListItemModel model) {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(model.ad!),
-                    Text(model.soyad!),
+                    Text(model.ad!, style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),),
+                    Text(model.soyad!, style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),)
                   ],
                 )
               ]
@@ -124,7 +137,7 @@ Widget customListTileBox(BuildContext context, shiftListItemModel model) {
           ],
         ),
           
-        
+
         
       ]
     ),

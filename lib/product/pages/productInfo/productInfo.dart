@@ -40,27 +40,31 @@ class productViewTopWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.1,
+      height: MediaQuery.of(context).size.height * 0.15,
       width: MediaQuery.of(context).size.width * 0.9,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(
-              width: MediaQuery.of(context).size.width * 0.3,
-              child:  Icon(
-                Icons.,
-                fill: 1.0,
-                size: MediaQuery.of(context).size.height * 0.1,
-              )),
-          SizedBox(width: MediaQuery.of(context).size.width * 0.01),
-          SizedBox(width: MediaQuery.of(context).size.width * 0.3,
-            child: Text(
-                model.name,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(
+                width: MediaQuery.of(context).size.width * 0.3,
+                child:  Icon(
+
+                  Icons.shopping_bag,
+                  fill: 1.0,
+                  size: MediaQuery.of(context).size.height * 0.15,
+                )),
+            SizedBox(width: MediaQuery.of(context).size.width * 0.01),
+            SizedBox(width: MediaQuery.of(context).size.width * 0.3,
+              child: Text(
+                  model.name,
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

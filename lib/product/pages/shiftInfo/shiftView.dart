@@ -172,27 +172,30 @@ class shiftViewUserWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.1,
+      height: MediaQuery.of(context).size.height * 0.15,
       width: MediaQuery.of(context).size.width * 0.9,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
 
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: MediaQuery.of(context).size.width * 0.3,
-              child: const Icon(
-                  Icons.person_2_outlined,
-                  size: 80,
-              )),
-          SizedBox(width: MediaQuery.of(context).size.width * 0.01),
-          SizedBox(width: MediaQuery.of(context).size.width * 0.3,
-              child: Text(
-                  model.ad.toString() + " " + model.soyad.toString(),
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)
-              ),
-          ),
-        ],
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.4,
+                child: const Icon(
+                    Icons.person_2_outlined,
+                    size: 80,
+                )),
+            SizedBox(width: MediaQuery.of(context).size.width * 0.01),
+            SizedBox(width: MediaQuery.of(context).size.width * 0.3,
+                child: Text(
+                    model.ad.toString() + '\n' + model.soyad.toString(),
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)
+                ),
+            ),
+          ],
+        ),
       ),
     );
   }
