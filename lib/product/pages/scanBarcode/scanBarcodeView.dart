@@ -32,7 +32,7 @@ class _scanBarcodeViewState extends State<scanBarcodeView> {
     setState(() {
       if (scannedBarcode != '-1') {
 
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const scanBarcodeLoading()));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => scanBarcodeLoading(scannedBarcode: scannedBarcode,)));
 
 
       } else {
@@ -85,13 +85,16 @@ class _scanBarcodeViewState extends State<scanBarcodeView> {
 }
 
 class scanBarcodeLoading extends StatelessWidget with scanBarcodeViewMixin {
-  const scanBarcodeLoading({super.key});
+
+  String scannedBarcode;
+  scanBarcodeLoading({super.key, required String this.scannedBarcode});
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder(
-          future: scanBarcodeView().getScannedProduct(context),
+          future: scanBarcodeView().getScannedProduct(context, scannedBarcode),
           builder: (context, snapshot){
 
             if (snapshot.connectionState == ConnectionState.waiting) {

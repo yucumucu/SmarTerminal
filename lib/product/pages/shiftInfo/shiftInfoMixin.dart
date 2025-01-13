@@ -18,68 +18,70 @@ mixin shiftInfoMixin{
   Future<void> fetchShiftList(BuildContext context) async {
     // get data from api
     // add data to state
-
-    http.Response response_real = http.Response("", 404);
-
-    /*
     try {
-      response_real = await http.get(
+
+
+
+      http.Response response_real = await http.get(
           Uri.parse(rootURL + shiftList));
-    }catch(e){
+
+
+
+      List<dynamic> shiftListJson;
+      List<shiftListItemModel> shiftListData;
+
+      if (response_real.statusCode != 200){
+
+        shiftListJson= dummyDataService().dummyShiftList();
+
+        shiftListData = shiftListJson.map((e) => shiftListItemModel.fromJson(e)).toList();
+
+      }else{
+
+        shiftListJson = jsonDecode(response_real.body);
+
+        shiftListData = shiftListJson.map((e) => shiftListItemModel.fromJson(e)).toList();
+
+      }
+
+
+      context.read<dataStateNotifier>().updateShiftListData(shiftListData);
+    }
+    catch(e){
       print(e);
     }
-
-     */
-    List<Map<String, dynamic>> shiftListJson;
-    List<shiftListItemModel> shiftListData;
-
-    if (response_real.statusCode != 200){
-
-      shiftListJson= dummyDataService().dummyShiftList();
-
-      shiftListData = shiftListJson.map((e) => shiftListItemModel.fromJson(e)).toList();
-
-    }else{
-
-      shiftListJson = jsonDecode(response_real.body);
-      shiftListData = shiftListJson.map((e) => shiftListItemModel.fromJson(e)).toList();
-
-    }
-
-    context.read<dataStateNotifier>().updateShiftListData(shiftListData);
-
 
   }
 
   Future<void> fetchSelectedShiftData(BuildContext context, String id, int index) async{
 
-
-    http.Response response_real = http.Response("", 404);
-
     String shiftDetailURL = urlEnum.getShiftDetails.url(id);
+    String rootURL = urlEnum.getRoot.url();
 
-    /*
+
+
     try {
-      response_real = await http.get(Uri.parse(rootURL + shiftDetailURL));
+      http.Response response_real = await http.get(Uri.parse(rootURL + shiftDetailURL));
+
+
+      Map<String,dynamic> data;
+
+      if(response_real.statusCode != 200){
+        data = dummyDataService().dummySelectedShift();
+      }else{
+        data = jsonDecode(response_real.body);
+      }
+      tempModel tmp = tempModel.fromJson(data);
+
+      shiftListItemModel itemModel = context.read<dataStateNotifier>().shiftListData[index];
+      selectedShiftDataModel selectedShiftData = itemModel.mergeToSelectedShiftModel(tmp);
+
+      context.read<dataStateNotifier>().updateSelectedShiftData(selectedShiftData);
+
     }catch(e){
       print(e);
     }
 
-     */
-
-    Map<String,dynamic> data;
-
-    if(response_real.statusCode != 200){
-      data = dummyDataService().dummySelectedShift();
-    }else{
-      data = jsonDecode(response_real.body);
-    }
-    tempModel tmp = tempModel.fromJson(data);
-
-    shiftListItemModel itemModel = context.read<dataStateNotifier>().shiftListData[index];
-    selectedShiftDataModel selectedShiftData = itemModel.mergeToSelectedShiftModel(tmp);
-
-    context.read<dataStateNotifier>().updateSelectedShiftData(selectedShiftData);
 
 
   }
@@ -90,38 +92,39 @@ mixin shiftInfoMixin{
 
 
     String shiftSalesURL = urlEnum.getShiftSales.url(id);
+    String rootURl = urlEnum.getRoot.url();
 
-    http.Response response_real = http.Response("", 404);
 
-    /*
+
     try {
-      response_real = await http.get(Uri.parse(rootURL + shiftSalesURL));
+      http.Response response_real = await http.get(Uri.parse(rootURL + shiftSalesURL));
+
+
+      Map<String,dynamic> data;
+
+      if(response_real.statusCode != 200){
+        data = dummyDataService().dummySelectedShiftSales();
+      }else{
+        data = jsonDecode(response_real.body);
+      }
+
+      List<shiftViewSalesModel> salesData = [];
+
+      data.forEach((key, value) {
+        shiftViewSalesModel salesModel = shiftViewSalesModel(
+            productName: key,
+            amount: value
+        );
+
+        salesData.add(salesModel);
+      });
+
+      context.read<dataStateNotifier>().updateSelectedShiftSalesData(salesData);
+
     }catch(e){
       print(e);
     }
 
-     */
-
-    Map<String,dynamic> data;
-
-    if(response_real.statusCode != 200){
-      data = dummyDataService().dummySelectedShiftSales();
-    }else{
-      data = jsonDecode(response_real.body);
-    }
-
-    List<shiftViewSalesModel> salesData = [];
-
-    data.forEach((key, value) {
-      shiftViewSalesModel salesModel = shiftViewSalesModel(
-        productName: key,
-        amount: value
-      );
-
-      salesData.add(salesModel);
-    });
-
-    context.read<dataStateNotifier>().updateSelectedShiftSalesData(salesData);
 
 
 

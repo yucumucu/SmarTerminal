@@ -18,7 +18,7 @@ mixin homeViewMixin{
 
     http.Response response_real = http.Response("", 404);
 
-    /*
+
     try {
       response_real = await http.get(
           Uri.parse(rootURL + mainMenuStatsURL));
@@ -26,7 +26,7 @@ mixin homeViewMixin{
       print(e);
     }
 
-     */
+
     //flutter: {"MADENÄ° YAÄ":5.0,"SÄ°GARA":48.0,"GIDA":314.0}
     // flutter: {"MADENÄ° YAÄ":5.0,"SÄ°GARA":48.0,"GIDA":314.0}
 

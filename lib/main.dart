@@ -32,7 +32,6 @@ class MyApp extends StatelessWidget {
       name: "product name",
       purchasePrice: 10.0,
       salePrice: 20.0,
-      amount: 320,
       group: "group",
       monthlySale: 245
     );

@@ -6,6 +6,8 @@ import 'dart:convert';
 import 'package:smarterminal/product/pages/productInfo/productModel.dart';
 import 'package:smarterminal/utils/dummyDataGenerator/dummyService.dart';
 
+import '../../../utils/enum/urlEnum.dart';
+
 class searchProductView extends StatefulWidget {
   @override
   _searchProductViewState createState() => _searchProductViewState();
@@ -18,6 +20,7 @@ class _searchProductViewState extends State<searchProductView> {
   String? _error;
 
   Future<void> _fetchProducts(String query) async {
+
     setState(() {
       _isLoading = true;
       _error = null;
@@ -25,10 +28,47 @@ class _searchProductViewState extends State<searchProductView> {
 
     try {
 
-      setState(() {
-        _products = dummyDataService().fetchSearchProductData();
-      });
 
+      String searchProductURL = urlEnum.getSearchedProduct.url();
+      String rootURL = urlEnum.getRoot.url();
+
+      String finalURL = rootURL + searchProductURL;
+
+
+      final Uri url = Uri.parse(finalURL).replace(
+          queryParameters: {
+            "name": query
+          }
+      );
+
+      http.Response response_real = await http.get(url);
+
+      print(response_real.statusCode);
+
+      List<dynamic> data;
+
+      if(response_real.statusCode != 200){
+        data = [
+          {
+            "name": "product name",
+            "purchasePrice": 0.0,
+            "salePrice": 0.0,
+            "group": "group",
+            "monthlySale": 0
+          }
+        ];
+
+      }else{
+
+        data = jsonDecode(response_real.body);
+        print(data);
+
+      }
+      setState(()  {
+
+        _products = data.map((e) => productModel.fromJson(e)).toList();
+
+      });
     } catch (e) {
       setState(() {
         _error = "An error occurred while fetching products. Please try again.";
@@ -75,34 +115,33 @@ class _searchProductViewState extends State<searchProductView> {
                 ),
               )
             else if (_products.isEmpty)
-                const Center(
-                  child: Text(
-                    'No products found.',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                )
-              else
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: _products.length,
-                    itemBuilder: (context, index) {
-                      final product = _products[index];
-                      return ListTile(
-                        title: Text(product.name),
-                        subtitle: Text(product.group ?? ''),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  productInfo(model: product),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  ),
+              const Center(
+                child: Text(
+                  'No products found.',
+                  style: TextStyle(fontSize: 18),
                 ),
+              )
+            else
+              Expanded(
+                child: ListView.builder(
+                  itemCount: _products.length,
+                  itemBuilder: (context, index) {
+                    final product = _products[index];
+                    return ListTile(
+                      title: Text(product.name),
+                      subtitle: Text(product.group ?? ''),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => productInfo(model: product),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
           ],
         ),
       ),

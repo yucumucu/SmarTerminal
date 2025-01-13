@@ -32,12 +32,14 @@ enum urlEnum {
   getShiftSummaries,
   getShiftDetails,
   getShiftSales,
+  getScannedBarcode,
+  getSearchedProduct,
   mainMenuStats;
 
   String url([String? id]) {
     switch (this) {
       case urlEnum.getRoot:
-        return "http://10.1.249.234:8080";
+        return "http://10.1.227.155:8080";
       case urlEnum.getAllShifts:
         return "/api/shifts";
       case urlEnum.getShiftById:
@@ -48,6 +50,10 @@ enum urlEnum {
         return "/api/shifts/${id}/details";
       case urlEnum.getShiftSales:
         return "/api/shifts/${id}/sales";
+      case urlEnum.getScannedBarcode:
+        return "/api/barkodlar/getByBarkodNo";
+      case urlEnum.getSearchedProduct:
+        return "/api/stok-kartlar/get/by-name";
       case urlEnum.mainMenuStats:
         return "/api/MainMenuStats";
 

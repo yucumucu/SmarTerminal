@@ -146,7 +146,6 @@ class dummyDataService{
         purchasePrice: 1,
         salePrice: 1,
         group: "group1",
-        amount: 1,
         monthlySale: 1);
 
     productModel _product2 = productModel(
@@ -154,7 +153,6 @@ class dummyDataService{
         purchasePrice: 2,
         salePrice: 2,
         group: "group2",
-        amount: 2,
         monthlySale: 2);
 
 
