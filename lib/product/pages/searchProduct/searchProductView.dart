@@ -43,7 +43,6 @@ class _searchProductViewState extends State<searchProductView> {
 
       http.Response response_real = await http.get(url);
 
-      print(response_real.statusCode);
 
       List<dynamic> data;
 
@@ -61,7 +60,6 @@ class _searchProductViewState extends State<searchProductView> {
       }else{
 
         data = jsonDecode(response_real.body);
-        print(data);
 
       }
       setState(()  {

@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:smarterminal/product/pages/productInfo/productModel.dart';
 import 'package:smarterminal/utils/enum/urlEnum.dart';
 
+/*
 Future<List<productModel>> searchProduct(String productName) async {
 
   http.Response response_real = http.Response("", 404);
@@ -46,6 +47,8 @@ Future<List<productModel>> searchProduct(String productName) async {
 
 }
 
+
+ */
 /*
 mixin searchProductViewMixin{
 

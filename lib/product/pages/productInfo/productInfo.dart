@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smarterminal/product/pages/productInfo/productModel.dart';
+import 'dart:math';
+import 'package:mrx_charts/mrx_charts.dart';
 
 
 class productInfo extends StatefulWidget {
@@ -16,18 +18,29 @@ class _productInfoState extends State<productInfo> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Ürün Bilgileri"),
+        title: const Text("Ürün Bilgileri", style: TextStyle(color: Colors.white),),
+        backgroundColor: Colors.deepPurple,
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Padding(padding: EdgeInsets.all(10),
-          child: productViewTopWidget(model: widget.model),),
 
-          productInfoWidget(model: widget.model),
-        ],
 
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(padding: EdgeInsets.all(10),
+            child: productViewTopWidget(model: widget.model),),
+
+            productInfoWidget(model: widget.model),
+            SizedBox(height: 20),
+            Container(
+              height: 400,
+              width: MediaQuery.of(context).size.width * 0.9,
+                child: MonthlySalesChart(salesData: widget.model.yearSales)),
+            SizedBox(height: 20),
+          ],
+
+        ),
       ),
     );
   }
@@ -51,7 +64,6 @@ class productViewTopWidget extends StatelessWidget {
             SizedBox(
                 width: MediaQuery.of(context).size.width * 0.3,
                 child:  Icon(
-
                   Icons.shopping_bag,
                   fill: 1.0,
                   size: MediaQuery.of(context).size.height * 0.15,
@@ -119,6 +131,82 @@ class productInfoWidget extends StatelessWidget {
             leading: const Icon(Icons.trending_up),
           ),
 
+        ],
+      ),
+    );
+  }
+}
+
+
+
+class MonthlySalesChart extends StatelessWidget {
+  final List<int> salesData;
+
+  MonthlySalesChart({required this.salesData}) {
+    assert(salesData.length == 12, 'Sales data must have exactly 12 values.');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: Colors.grey,
+        borderRadius: BorderRadius.circular(8.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 8.0,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Chart(
+        layers: [
+          ChartAxisLayer(
+            settings: ChartAxisSettings(
+              x: ChartAxisSettingsAxis(
+                frequency: 1.0,
+                max: 12.0,
+                min: 1.0,
+                textStyle: TextStyle(
+                  color: Colors.white.withOpacity(0.6),
+                  fontSize: 10.0,
+                ),
+              ),
+              y: ChartAxisSettingsAxis(
+                frequency: 10.0,
+                max: salesData.reduce(max).toDouble(),
+                min: 0.0,
+                textStyle: TextStyle(
+                  color: Colors.white.withOpacity(0.6),
+                  fontSize: 10.0,
+                ),
+              ),
+            ),
+            labelX: (value) {
+              final months = [
+                'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+              ];
+              return months[value.toInt() - 1];
+            },
+            labelY: (value) => value.toInt().toString(),
+          ),
+          ChartBarLayer(
+            items: List.generate(
+              salesData.length,
+                  (index) => ChartBarDataItem(
+                color: const Color(0xFF8043F9),
+                value: salesData[index].toDouble(),
+                x: index + 1.0,
+              ),
+            ),
+            settings: const ChartBarSettings(
+              thickness: 8.0,
+              radius: BorderRadius.all(Radius.circular(4.0)),
+            ),
+          ),
         ],
       ),
     );

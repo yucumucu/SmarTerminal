@@ -6,8 +6,9 @@ class productModel{
   double salePrice;
   String group;
   int monthlySale;
+  List<int> yearSales;
 
-  productModel({required this.name, required this.purchasePrice, required this.salePrice, required this.group, required this.monthlySale});
+  productModel({required this.name, required this.purchasePrice, required this.salePrice, required this.group, required this.monthlySale, required this.yearSales});
 
   String get getName => name;
   double get getPurchasePrice => purchasePrice;
@@ -21,7 +22,10 @@ class productModel{
       purchasePrice: json['purchasePrice'] ?? -1,
       salePrice: json['salePrice'] ?? -1,
       group: json['group'] ?? "null",
-      monthlySale: json['monthlySale'] ?? -1);
+      monthlySale: json['monthlySale'] ?? -1,
+      yearSales: json['yearSales'] ?? [0,0,0,0,0,0,0,0,0,0,0,0]
+    );
+
   }
 
   Map<String, dynamic> toJson() => {

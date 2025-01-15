@@ -146,14 +146,18 @@ class dummyDataService{
         purchasePrice: 1,
         salePrice: 1,
         group: "group1",
-        monthlySale: 1);
+        monthlySale: 1,
+        yearSales: [0,0,0,0,0,0,0,0,0,0,0,0]
+    );
 
     productModel _product2 = productModel(
         name: "product2",
         purchasePrice: 2,
         salePrice: 2,
         group: "group2",
-        monthlySale: 2);
+        monthlySale: 2,
+        yearSales: [0,0,0,0,0,0,0,0,0,0,0,0]
+    );
 
 
     return [_product1, _product2];

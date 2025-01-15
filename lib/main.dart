@@ -33,7 +33,8 @@ class MyApp extends StatelessWidget {
       purchasePrice: 10.0,
       salePrice: 20.0,
       group: "group",
-      monthlySale: 245
+      monthlySale: 245,
+      yearSales: [134, 40, 120, 40, 50, 61, 73, 35, 54, 120, 10, 34]
     );
 
 
@@ -69,8 +70,8 @@ class MyApp extends StatelessWidget {
       ),
 
 
-      //home: productInfo(model: model),
-      home: homeView(),
+      home: productInfo(model: model),
+      //home: homeView(),
     );
   }
 }
