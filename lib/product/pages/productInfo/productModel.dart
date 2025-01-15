@@ -6,15 +6,18 @@ class productModel{
   double salePrice;
   String group;
   int monthlySale;
-  List<int> yearSales;
+  List<int> yearlySale;
+  List<int> monthlySales;
 
-  productModel({required this.name, required this.purchasePrice, required this.salePrice, required this.group, required this.monthlySale, required this.yearSales});
+  productModel({required this.name, required this.purchasePrice, required this.salePrice, required this.group, required this.monthlySale, required this.yearlySale, required this.monthlySales});
 
   String get getName => name;
   double get getPurchasePrice => purchasePrice;
   double get getSalePrice => salePrice;
   String get getGroup => group;
   int get getMonthlySale => monthlySale;
+  List<int> get getYearlySale => yearlySale;
+  List<int> get getMonthlySales => monthlySales;
 
   factory productModel.fromJson(Map<String, dynamic> json){
     return productModel(
@@ -23,7 +26,8 @@ class productModel{
       salePrice: json['salePrice'] ?? -1,
       group: json['group'] ?? "null",
       monthlySale: json['monthlySale'] ?? -1,
-      yearSales: json['yearSales'] ?? [0,0,0,0,0,0,0,0,0,0,0,0]
+      yearlySale: List<int>.from(json['yearlyGraph']),
+      monthlySales: List<int>.from(json['monthlyGraph']),
     );
 
   }
@@ -33,7 +37,9 @@ class productModel{
     'purchasePrice': purchasePrice,
     'salePrice': salePrice,
     'group': group,
-    'monthlySale': monthlySale
+    'monthlySale': monthlySale,
+    'yearlyGraph': yearlySale,
+    'monthlyGraph': monthlySales
   };
 
 

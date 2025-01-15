@@ -29,22 +29,27 @@ class _homeViewState extends State<homeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: false,
+        title: const Image(image: AssetImage("assets/zentek-logo-type-2.png"), width: 100, height: 100,),
       ),
 
-
       floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: colors.floatingActionButtonColor,
+      floatingActionButton: Container(
+        width: MediaQuery.of(context).size.width * 0.2,
+        child: FloatingActionButton(
 
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(100),
+          backgroundColor: colors.floatingActionButtonColor,
+          mini: false,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(100),
 
+          ),
+          onPressed: () {
+            Navigator.pushNamed(context, "/scanBarcodeView");
+            // Add your onPressed code here!
+          },
+          child: const Icon(Icons.document_scanner_outlined, size: 40,),
         ),
-        onPressed: () {
-          Navigator.pushNamed(context, "/scanBarcodeView");
-          // Add your onPressed code here!
-        },
-        child: const Icon(Icons.document_scanner_outlined),
       ),
 
       bottomNavigationBar: mainBottomNavBar(),
@@ -56,15 +61,7 @@ class _homeViewState extends State<homeView> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
 
-
-          Padding(
-            padding: const EdgeInsets.only(top: 15.0, bottom: 5.0),
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.9,
-              child: const AnimatedLetterText(),
-            ),
-          ),
-
+          SizedBox(height: 10,),
           mainViewStatsCard(),
           Padding(padding: EdgeInsets.only(top: sizes().cardButtonPadding(context))),
           Row(
@@ -78,14 +75,18 @@ class _homeViewState extends State<homeView> {
                 width: sizes().secondaryCardButtonWidth(context),
                 height: sizes().secondaryCardButtonHeight(context),
               ),
-              Padding(padding: EdgeInsets.only(left: sizes().cardButtonPadding(context))),
-              cardButton(
-                title: "Search Product",
-                routeName: "/searchProductView",
-                icon: Icons.search,
-                width: sizes().secondaryCardButtonWidth(context),
-                height: sizes().secondaryCardButtonHeight(context),
-              ), 
+              SizedBox(width: MediaQuery.of(context).size.width * 0.02),
+              Padding(
+                padding: EdgeInsets.all(sizes().cardButtonPadding(context)),
+                child: cardButton(
+                  title: "Search Product",
+                  routeName: "/searchProductView",
+                  icon: Icons.search,
+                  width: sizes().secondaryCardButtonWidth(context),
+                  height: sizes().secondaryCardButtonHeight(context),
+                ),
+              ),
+              SizedBox(height: 20,)
             ],
           ),
 

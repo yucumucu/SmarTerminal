@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 import 'package:smarterminal/product/pages/productInfo/productInfo.dart';
 import 'package:smarterminal/product/pages/scanBarcode/scanBarcodeViewMixin.dart';
 
@@ -13,33 +13,42 @@ class scanBarcodeView extends StatefulWidget with scanBarcodeViewMixin {
 class _scanBarcodeViewState extends State<scanBarcodeView> {
   String _scannedBarcode = 'No barcode scanned';
 
-  /// Start scanning for a barcode
   Future<void> startBarcodeScan() async {
     String scannedBarcode;
     try {
-      scannedBarcode = await FlutterBarcodeScanner.scanBarcode(
-        '#ff6666', // Color of the cancel button
-        'Cancel',  // Cancel button text
-        true,      // Show flash option
-        ScanMode.BARCODE, // Scan mode (BARCODE or QR_CODE)
-      );
-    } catch (e) {
-      scannedBarcode = 'Failed to scan barcode.';
-    }
+      scannedBarcode = await SimpleBarcodeScanner.scanBarcode(
+        context,
+        barcodeAppBar: const BarcodeAppBar(
+          appBarTitle: 'Test',
+          centerTitle: false,
+          enableBackButton: true,
+          backButtonIcon: Icon(Icons.arrow_back_ios),
+        ),
+        isShowFlashIcon: true,
+        delayMillis: 2000,
+        cameraFace: CameraFace.front,
+      ) ?? "-1";
 
-    if (!mounted) return;
-
-    setState(() {
       if (scannedBarcode != '-1') {
-
-        Navigator.push(context, MaterialPageRoute(builder: (context) => scanBarcodeLoading(scannedBarcode: scannedBarcode,)));
-
-
+        // Navigate after getting the scanned barcode.
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => scanBarcodeLoading(scannedBarcode: scannedBarcode),
+          ),
+        );
       } else {
-        _scannedBarcode = 'Scan cancelled.';
+        setState(() {
+          _scannedBarcode = 'Scan cancelled.';
+        });
       }
-    });
+    } catch (e) {
+      setState(() {
+        _scannedBarcode = 'Failed to scan barcode.';
+      });
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -85,30 +94,24 @@ class _scanBarcodeViewState extends State<scanBarcodeView> {
 }
 
 class scanBarcodeLoading extends StatelessWidget with scanBarcodeViewMixin {
-
-  String scannedBarcode;
-  scanBarcodeLoading({super.key, required String this.scannedBarcode});
-
+  final String scannedBarcode;
+  scanBarcodeLoading({super.key, required this.scannedBarcode});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder(
-          future: scanBarcodeView().getScannedProduct(context, scannedBarcode),
-          builder: (context, snapshot){
-
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(color: Colors.green),
-              );
-            } else if (snapshot.connectionState == ConnectionState.done) {
-
-              productModel model = snapshot.data as productModel;
-
-              Navigator.push(context, MaterialPageRoute(builder: (context) => productInfo(model: model)));
-
-
-            } else if (snapshot.hasError) {
+      body: FutureBuilder<productModel>(
+        future: scanBarcodeView().getScannedProduct(context, scannedBarcode),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(color: Colors.green),
+            );
+          } else if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasData) {
+              productModel model = snapshot.data!;
+              return productInfo(model: model);
+            } else {
               return const Center(
                 child: Text(
                   "Failed to load scanned data. Please try again.",
@@ -116,19 +119,23 @@ class scanBarcodeLoading extends StatelessWidget with scanBarcodeViewMixin {
                 ),
               );
             }
-
+          } else if (snapshot.hasError) {
             return const Center(
               child: Text(
                 "Failed to load scanned data. Please try again.",
                 style: TextStyle(color: Colors.red),
               ),
             );
+          }
 
-
-
-
-      })
+          return const Center(
+            child: Text(
+              "Failed to load scanned data. Please try again.",
+              style: TextStyle(color: Colors.red),
+            ),
+          );
+        },
+      ),
     );
   }
 }
-

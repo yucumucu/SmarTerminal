@@ -1,228 +1,109 @@
 import 'package:flutter/material.dart';
+import 'package:smarterminal/product/pages/home/homeView.dart';
 
 
-/*
-
-class loginView extends StatefulWidget {
-  const loginView({Key? key}) : super(key: key);
-
+class LoginPage extends StatefulWidget {
   @override
-  State<loginView> createState() => _LoginPageState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<loginView> {
-  //
-  final _loginFormKey = GlobalKey<FormState>();
+class _LoginPageState extends State<LoginPage> {
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  String _errorMessage = '';
 
-  late String username;
-  late String code;
+  // Hardcoded credentials for demonstration purposes
+  final String correctUsername = 'admin';
+  final String correctPassword = 'password123';
 
-
+  // Function to validate the username and password
+  void _validateCredentials() {
+    if (_usernameController.text == correctUsername && _passwordController.text == correctPassword) {
+      setState(() {
+        _errorMessage = '';
+      });
+      // Navigate to the next page or perform any other action
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => homeView()),
+      );
+    } else {
+      setState(() {
+        _errorMessage = 'Incorrect username or password. Please try again.';
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return SafeArea(
-      child: Scaffold(
-        floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
-        floatingActionButton: FloatingActionButton( backgroundColor: Colors.black,mini: true,onPressed:() {
-          Navigator.pop(context);
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Login Page'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+               Image(
+                 width: MediaQuery.of(context).size.width * 0.5,
 
-        },
-          child : Icon(Icons.arrow_back),
-        ),
-        backgroundColor:Color(0xffe71d73),
-        body: Column(
-          children: [
-            Expanded(
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(50),),
-                ),
-                child: SingleChildScrollView(
-                  child: Form(
-                    key: _loginFormKey,
-                    child: Column(
-                      children: [
-                        const PageHeading(title: 'Giriş Yapın',),
-                        CustomInputField(
-                            labelText: 'Kullanıcı Adı',
-                            hintText: 'Kullanıcı Adı Giriniz',
-                            onSaved: (textValue){
-
-                              username = textValue!;
-                            },
-                            validator: (textValue) {
-
-
-                              if(textValue!.isEmpty){
-                                return 'This part can not be null';
-                              }
-
-
-                              return null;
-                            }
-
-
-                        ),
-                        const SizedBox(height: 16,),
-                        CustomInputField(
-                          labelText: 'Şifre',
-                          hintText: 'Şifre Giriniz',
-                          obscureText: true,
-                          suffixIcon: true,
-                          onSaved: (textValue){
-
-                            code = textValue!;
-                          },
-                          validator: (textValue) {
-
-                            if(textValue!.isEmpty){
-                              return 'This part can not be null';
-                            }
-
-
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 16,),
-
-                        CustomFormButton(innerText: 'Giriş Yap', onPressed: _handleLoginUser,),
-
-                        const SizedBox(height: 20,),
-                      ],
-                    ),
-                  ),
-                ),
+                   image: AssetImage('assets/zentek-logo-type-2.png')),
+              SizedBox(
+                child: Text("Zentek", style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black
+                ),),
               ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-
-}
-
-
-class CustomInputField extends StatefulWidget {
-  final String labelText;
-  final String hintText;
-  final String? Function(String?) validator;
-  final String? Function(String?) onSaved;
-  final bool suffixIcon;
-  final bool? isDense;
-  final bool obscureText;
-
-  const CustomInputField({
-    Key? key,
-    required this.labelText,
-    required this.hintText,
-    required this.validator,
-    required this.onSaved,
-    this.suffixIcon = false,
-    this.isDense,
-    this.obscureText = false
-  }) : super(key: key);
-
-  @override
-  State<CustomInputField> createState() => _CustomInputFieldState();
-}
-
-class _CustomInputFieldState extends State<CustomInputField> {
-  //
-  bool _obscureText = true;
-
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Container(
-      width: size.width * 0.9,
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
-      child: Column(
-        children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text(widget.labelText, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
-          ),
-          TextFormField(
-            autocorrect: false,
-            obscureText: (widget.obscureText && _obscureText),
-            decoration: InputDecoration(
-              isDense: (widget.isDense != null) ? widget.isDense : false,
-              hintText: widget.hintText,
-              suffixIcon: widget.suffixIcon ? IconButton(
-                icon: Icon(
-                  _obscureText ? Icons.remove_red_eye : Icons.visibility_off_outlined,
-                  color: Colors.black54,
+              const SizedBox(height: 20),
+              TextFormField(
+                controller: _usernameController,
+                decoration: const InputDecoration(
+                  labelText: 'Username',
+                  border: OutlineInputBorder(),
                 ),
-                onPressed: () {
-                  setState(() {
-                    _obscureText = !_obscureText;
-                  });
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a username';
+                  }
+                  return null;
                 },
-              ): null,
-              suffixIconConstraints: (widget.isDense != null) ? const BoxConstraints(
-                  maxHeight: 33
-              ): null,
-            ),
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            validator: widget.validator,
-            onSaved: widget.onSaved,
+              ),
+              SizedBox(height: 20),
+              TextFormField(
+                controller: _passwordController,
+                obscureText: true,
+                decoration: const InputDecoration(
+                  labelText: 'Password',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a password';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _validateCredentials,
+                child: const Text('Login'),
+              ),
+              SizedBox(height: 10),
+              if (_errorMessage.isNotEmpty)
+                Text(
+                  _errorMessage,
+                  style: TextStyle(color: Colors.red),
+                ),
+            ],
           ),
-        ],
-      ),
-    );
-  }
-}
-
-
-
-class CustomFormButton extends StatelessWidget {
-  final String innerText;
-  final void Function()? onPressed;
-  const CustomFormButton({Key? key, required this.innerText, required this.onPressed}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Container(
-      width: size.width * 0.8,
-      decoration: BoxDecoration(
-        color:Color(0xfffeda46),
-        borderRadius: BorderRadius.circular(26),
-      ),
-      child: TextButton(
-        onPressed: onPressed,
-        child: Text(innerText, style: const TextStyle(color:Colors.black, fontSize: 20,fontWeight: FontWeight.normal),),
-      ),
-    );
-  }
-}
-
-class PageHeading extends StatelessWidget {
-  final String title;
-  const PageHeading({Key? key, required this.title}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.centerLeft,
-      padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 25),
-      child: Text(
-        title,
-        style: const TextStyle(
-          fontSize: 30,
-          fontWeight: FontWeight.bold,
-
         ),
       ),
     );
   }
 }
-
-
-
- */

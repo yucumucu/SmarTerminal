@@ -43,6 +43,7 @@ class _searchProductViewState extends State<searchProductView> {
 
       http.Response response_real = await http.get(url);
 
+      print(response_real.statusCode);
 
       List<dynamic> data;
 
@@ -60,13 +61,16 @@ class _searchProductViewState extends State<searchProductView> {
       }else{
 
         data = jsonDecode(response_real.body);
+        print(data);
 
       }
-      setState(()  {
-
-        _products = data.map((e) => productModel.fromJson(e)).toList();
-
+      setState(() {
+        _products = (data as List<dynamic>)
+            .map((e) => productModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+        print("here");
       });
+
     } catch (e) {
       setState(() {
         _error = "An error occurred while fetching products. Please try again.";

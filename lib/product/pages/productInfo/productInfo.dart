@@ -36,7 +36,12 @@ class _productInfoState extends State<productInfo> {
             Container(
               height: 400,
               width: MediaQuery.of(context).size.width * 0.9,
-                child: MonthlySalesChart(salesData: widget.model.yearSales)),
+                child: MonthlySalesChart(salesData: widget.model.yearlySale)),
+            SizedBox(height: 20),
+            Container(
+              height: 400,
+              width: MediaQuery.of(context).size.width * 0.9,
+              child: CurrentMonthSales(salesData: widget.model.monthlySales)),
             SizedBox(height: 20),
           ],
 
@@ -95,8 +100,13 @@ class productInfoWidget extends StatelessWidget {
         model.purchasePrice == 0 ?  0 :  model.salePrice / model.purchasePrice;
     profitMargin = profitMargin * 100;
 
+    //get 2 digit after comma
+    profitMargin = double.parse((profitMargin).toStringAsFixed(2));
+
 
     double monthlyProfit = (model.salePrice - model.purchasePrice) * model.monthlySale;
+
+    monthlyProfit = double.parse((monthlyProfit).toStringAsFixed(2));
 
 
 
@@ -136,6 +146,8 @@ class productInfoWidget extends StatelessWidget {
     );
   }
 }
+
+
 
 
 
@@ -191,6 +203,79 @@ class MonthlySalesChart extends StatelessWidget {
               ];
               return months[value.toInt() - 1];
             },
+            labelY: (value) => value.toInt().toString(),
+          ),
+          ChartBarLayer(
+            items: List.generate(
+              salesData.length,
+                  (index) => ChartBarDataItem(
+                color: const Color(0xFF8043F9),
+                value: salesData[index].toDouble(),
+                x: index + 1.0,
+              ),
+            ),
+            settings: const ChartBarSettings(
+              thickness: 8.0,
+              radius: BorderRadius.all(Radius.circular(4.0)),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
+
+class CurrentMonthSales extends StatelessWidget {
+  final List<int> salesData;
+
+
+  CurrentMonthSales({required this.salesData}) {
+    assert(salesData.length == 30, 'Sales data must have exactly 30 values.');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: Colors.grey,
+        borderRadius: BorderRadius.circular(8.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 8.0,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Chart(
+        layers: [
+          ChartAxisLayer(
+            settings: ChartAxisSettings(
+              x: ChartAxisSettingsAxis(
+                frequency: 5.0,
+                max: 30.0,
+                min: 1.0,
+                textStyle: TextStyle(
+                  color: Colors.white.withOpacity(0.6),
+                  fontSize: 10.0,
+                ),
+              ),
+              y: ChartAxisSettingsAxis(
+                frequency: 10.0,
+                max: salesData.reduce(max).toDouble(),
+                min: 0.0,
+                textStyle: TextStyle(
+                  color: Colors.white.withOpacity(0.6),
+                  fontSize: 10.0,
+                ),
+              ),
+            ),
+            labelX: (value) => value.toInt().toString(),
             labelY: (value) => value.toInt().toString(),
           ),
           ChartBarLayer(

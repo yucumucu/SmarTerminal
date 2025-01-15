@@ -188,7 +188,7 @@ class shiftViewUserWidget extends StatelessWidget {
                     size: 80,
                 )),
             SizedBox(width: MediaQuery.of(context).size.width * 0.01),
-            SizedBox(width: MediaQuery.of(context).size.width * 0.3,
+            SizedBox(width: MediaQuery.of(context).size.width * 0.4,
                 child: Text(
                     model.ad.toString() + '\n' + model.soyad.toString(),
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)

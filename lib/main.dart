@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:smarterminal/product/feature/auth/loginView.dart';
 import 'package:smarterminal/product/pages/home/homeView.dart';
 import 'package:smarterminal/product/pages/productInfo/productInfo.dart';
 import 'package:smarterminal/product/pages/productInfo/productModel.dart';
@@ -34,7 +35,9 @@ class MyApp extends StatelessWidget {
       salePrice: 20.0,
       group: "group",
       monthlySale: 245,
-      yearSales: [134, 40, 120, 40, 50, 61, 73, 35, 54, 120, 10, 34]
+      yearlySale: [134, 40, 120, 40, 50, 61, 73, 35, 54, 120, 10, 34],
+      //this must has 30 items
+      monthlySales: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 210, 220, 230, 240, 250, 260, 270, 280, 290, 300],
     );
 
 
@@ -70,8 +73,8 @@ class MyApp extends StatelessWidget {
       ),
 
 
-      home: productInfo(model: model),
-      //home: homeView(),
+      //home: productInfo(model: model),
+      home: LoginPage(),
     );
   }
 }

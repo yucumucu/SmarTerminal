@@ -58,7 +58,8 @@ mixin scanBarcodeViewMixin {
         "salePrice": 0.0,
         "group": "group",
         "amount": 0.0,
-        "monthlySale": 0
+        "monthlySale": 0,
+        "yearlySale": [0,0,0,0,0,0,0,0,0,0,0,0],
       };
     }
     else
