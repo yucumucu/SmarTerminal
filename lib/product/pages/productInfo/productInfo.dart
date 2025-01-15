@@ -56,10 +56,21 @@ class productViewTopWidget extends StatelessWidget {
   productModel model;
   productViewTopWidget({super.key,required this.model});
 
+
   @override
   Widget build(BuildContext context) {
+
+    List modelNameList = model.name.split(" ");
+    String modelName = "";
+
+    modelNameList.forEach((element) {
+      modelName = modelName + " " + element;
+    });
+
+
+
     return Container(
-      height: MediaQuery.of(context).size.height * 0.15,
+      height: MediaQuery.of(context).size.height * 0.17,
       width: MediaQuery.of(context).size.width * 0.9,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -77,8 +88,8 @@ class productViewTopWidget extends StatelessWidget {
             SizedBox(width: MediaQuery.of(context).size.width * 0.01),
             SizedBox(width: MediaQuery.of(context).size.width * 0.3,
               child: Text(
-                  model.name,
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)
+                  modelName,
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
               ),
             ),
           ],
