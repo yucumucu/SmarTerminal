@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smarterminal/product/pages/productInfo/productInfoMixin.dart';
 import 'package:smarterminal/product/pages/productInfo/productModel.dart';
 import 'dart:math';
 import 'package:mrx_charts/mrx_charts.dart';
@@ -89,22 +90,27 @@ class productViewTopWidget extends StatelessWidget {
 
 
 
-class productInfoWidget extends StatelessWidget {
+class productInfoWidget extends StatefulWidget with productInfoMixin {
   productModel model;
   productInfoWidget({super.key, required this.model});
 
   @override
+  State<productInfoWidget> createState() => _productInfoWidgetState();
+}
+
+class _productInfoWidgetState extends State<productInfoWidget> {
+  @override
   Widget build(BuildContext context) {
 
     double profitMargin =
-        model.purchasePrice == 0 ?  0 :  model.salePrice / model.purchasePrice;
+        widget.model.purchasePrice == 0 ?  0 :  widget.model.salePrice / widget.model.purchasePrice;
     profitMargin = profitMargin * 100;
 
     //get 2 digit after comma
     profitMargin = double.parse((profitMargin).toStringAsFixed(2));
 
 
-    double monthlyProfit = (model.salePrice - model.purchasePrice) * model.monthlySale;
+    double monthlyProfit = (widget.model.salePrice - widget.model.purchasePrice) * widget.model.monthlySale;
 
     monthlyProfit = double.parse((monthlyProfit).toStringAsFixed(2));
 
@@ -117,15 +123,50 @@ class productInfoWidget extends StatelessWidget {
       child: Column(
         children: [
           ListTile(
-            title: Text("Ürün Grubu: ${model.group}"),
+            title: Text("Ürün Grubu: ${widget.model.group}"),
             leading: const Icon(Icons.shopping_bag),
           ),
           ListTile(
-            title: Text("Satış Fiyat: ${model.salePrice}"),
+            title: Text("Satış Fiyat: ${widget.model.salePrice}"),
             leading: const Icon(Icons.attach_money),
+            trailing: IconButton(onPressed: (){
+
+              TextEditingController controller = TextEditingController(text: widget.model.salePrice.toString());
+
+              //edit price and reload page
+              showDialog(context: context, builder: (context) {
+                return AlertDialog(
+                  title: Text("Fiyat Değiştir"),
+                  content: TextField(
+                    controller: controller,
+                  ),
+                  actions: [
+                    ElevatedButton(onPressed: (){
+
+                      double newPrice = double.parse(controller.text);
+                      setState(() {
+                        widget.model.salePrice = newPrice;
+                      });
+                      print("new price: $newPrice");
+                      print("model price: ${widget.model.salePrice}");
+                      print(widget.model.id);
+
+                      productInfoWidget(model: widget.model).editSalePrice(context,widget.model.id, widget.model.salePrice);
+                      print("new price: $newPrice");
+                      print("model price: ${widget.model.salePrice}");
+
+
+                      Navigator.pop(context);
+
+                    }, child: Text("Kaydet"))
+                  ],
+                );
+              });
+
+            }, icon: Icon(Icons.edit)),
           ),
           ListTile(
-            title: Text("Alış Fiyat: ${model.purchasePrice}"),
+            title: Text("Alış Fiyat: ${widget.model.purchasePrice}"),
             leading: const Icon(Icons.money_off),
           ),
           ListTile(
@@ -133,7 +174,7 @@ class productInfoWidget extends StatelessWidget {
             leading: const Icon(Icons.money),
           ),
           ListTile(
-            title: Text("Aylık Satış: ${model.monthlySale}"),
+            title: Text("Aylık Satış: ${widget.model.monthlySale}"),
             leading: const Icon(Icons.calendar_month_outlined),
           ),
           ListTile(

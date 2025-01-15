@@ -24,7 +24,7 @@ class _LoginPageState extends State<LoginPage> {
         _errorMessage = '';
       });
       // Navigate to the next page or perform any other action
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => homeView()),
       );

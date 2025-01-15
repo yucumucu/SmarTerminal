@@ -142,6 +142,7 @@ class dummyDataService{
 
   List<productModel> fetchSearchProductData(){
     productModel _product1 = productModel(
+      id: 1,
         name: "product1",
         purchasePrice: 1,
         salePrice: 1,
@@ -152,6 +153,7 @@ class dummyDataService{
     );
 
     productModel _product2 = productModel(
+        id: 2,
         name: "product2",
         purchasePrice: 2,
         salePrice: 2,

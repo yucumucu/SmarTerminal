@@ -34,6 +34,7 @@ enum urlEnum {
   getShiftSales,
   getScannedBarcode,
   getSearchedProduct,
+  getEditSalePrice,
   mainMenuStats;
 
   String url([String? id]) {
@@ -54,6 +55,8 @@ enum urlEnum {
         return "/api/barkodlar/getByBarkodNo";
       case urlEnum.getSearchedProduct:
         return "/api/stok-kartlar/get/by-name";
+      case urlEnum.getEditSalePrice:
+        return "/api/stok-kartlar/edit-price";
       case urlEnum.mainMenuStats:
         return "/api/MainMenuStats";
 

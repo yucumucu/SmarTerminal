@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
 
 
     productModel model = productModel(
+      id: 1,
       name: "product name",
       purchasePrice: 10.0,
       salePrice: 20.0,

@@ -221,11 +221,8 @@ class mainBottomNavBar extends StatelessWidget {
 
          */
         BottomNavigationBarItem(
-          icon: Icon(
-              Icons.account_box,
-            color: colors.mainNavbarColor,
-          ),
-          label: 'Account',
+          icon: Image(image: AssetImage("assets/zentek-logo-type-2.png"), width: 50, height: 50,),
+          label: '',
         ),
       ],
     );
