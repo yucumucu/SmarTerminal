@@ -1,0 +1,57 @@
+# IntelliJ IDEA-specific
+/.idea/
+/shelf/
+/workspace.xml
+/httpRequests/
+/dataSources/
+/dataSources.local.xml
+*.iml
+*.iws
+*.ipr
+
+# Build directories
+/target/
+!**/src/main/**/target/
+!**/src/test/**/target/
+/build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# Compiled files
+*.class
+
+# Logs and archives
+*.log
+*.war
+*.ear
+*.jar
+
+# Maven-specific
+!.mvn/wrapper/maven-wrapper.jar
+
+# OS and editor-specific
+.DS_Store
+Thumbs.db
+*.swp
+
+# Help and temporary files
+HELP.md
+
+# Spring Tool Suite (STS)
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+# NetBeans-specific
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# Visual Studio Code-specific
+.vscode/
